@@ -1,16 +1,14 @@
 import 'dotenv/config';
 import Anthropic from '@anthropic-ai/sdk';
-import { myReadFile, read } from './read.js';
+import { readAFile, read } from './read.js';
 
 const prompt = process.argv[3];
 console.log(prompt);
 const client = new Anthropic();
 
 function runTool(name: string, input: Record<string, unknown>) {
-  console.log(name)
-  console.log(JSON.stringify(input))
   if (name === "read") {
-    return myReadFile(input.path as string, input.options as number, input.callback as number);
+    return readAFile(input.path as string, input.options as number, input.callback as number);
   }
 }
 const messages: Anthropic.MessageParam[] = [
@@ -58,8 +56,5 @@ while (response.stop_reason === "tool_use") {
 for (const block of response.content) {
   if (block.type === "text") {
     console.log(block.text);
-  } else if (block.type === "tool_use") {
-    console.log("Claude wanted to use a tool");
-
   }
 }
