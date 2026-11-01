@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import Anthropic from '@anthropic-ai/sdk';
-import { readAFile, read } from './read.js';
+import { readAFile, read } from './tools/read.js';
 
 const prompt = process.argv[3];
 console.log(prompt);
