@@ -3,7 +3,6 @@ import Anthropic from '@anthropic-ai/sdk';
 import { readAFile, read } from './tools/read.js';
 
 const prompt = process.argv[3];
-console.log(prompt);
 const client = new Anthropic();
 
 function runTool(name: string, input: Record<string, unknown>) {
@@ -11,6 +10,7 @@ function runTool(name: string, input: Record<string, unknown>) {
     return readAFile(input.path as string, input.options as number, input.callback as number);
   }
 }
+
 const messages: Anthropic.MessageParam[] = [
   {
     role: "user",
