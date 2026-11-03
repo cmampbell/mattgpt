@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import Anthropic from '@anthropic-ai/sdk';
 import { readAFile, read } from './tools/read.js';
+import { grep, grepDir } from './tools/grep.js';
 
 const prompt = process.argv[3];
 const client = new Anthropic();
@@ -8,9 +9,13 @@ const client = new Anthropic();
 function runTool(name: string, input: Record<string, unknown>) {
   if (name === "read") {
     return readAFile(input.path as string, input.options as number, input.callback as number);
+  } else if (name === "grep") {
+    return grepDir(input.pattern as string);
   }
 }
 
+//TODO create more tools!
+const tools = [read, grep]
 const messages: Anthropic.MessageParam[] = [
   {
     role: "user",
@@ -22,13 +27,14 @@ const params: Anthropic.MessageCreateParams = {
   max_tokens: 1024,
   messages: messages,
   model: "claude-haiku-5-5",
-  tools: [read]
+  tools: tools
 };
 
 let response: Anthropic.Message = await client.messages.create(params);
 
 while (response.stop_reason === "tool_use") {
   const toolResults: Anthropic.ToolResultBlockParam[] = [];
+  //TODO refactor this into a method
   for (const block of response.content) {
     if (block.type === "tool_use") {
       try {

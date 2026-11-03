@@ -14,9 +14,11 @@ const read: Anthropic.Tool = ({
     },
     required: ["path"]
   },
+  // TODO write a better description
   description: `Read a file from the project. Returns numbered lines.
     WHEN TO USE: viewing file contents, checking configs, reading source code.
-    WHEN NOT TO USE: searching across files (use grep instead).`,
+    WHEN NOT TO USE: searching across files (use grep instead).
+    EXAMPLES: "Can you give me a summary of tsconfig.json?", "Can you find any bugs in this file?"`,
 })
 
 function readAFile(path: string, offset: number, limit: number) {
